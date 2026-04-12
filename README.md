@@ -1,2 +1,2 @@
-# projeto-pericia-criminal-feminicidio
-Projeto individual referente ao tema da atuação da perícia criminal em casos de feminicídio.
+# ATUAÇÃO DA PERÍCIA CRIMINAL EM CASOS DE FEMINICÍDIO NO BRASIL 
+## Análise de como a perícia criminal contribui para a investigação de crimes contra mulheres no Brasil.
