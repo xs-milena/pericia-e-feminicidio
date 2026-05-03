@@ -12,7 +12,7 @@
         body {
             background-color: #0a0a0a;
             color: #e0e0e0;
-            font-family: 'JetBrains Mono', Arial;
+            font-family: 'JetBrains Mono';
            
         }
        
@@ -48,13 +48,13 @@
         }
 
         .navegacao-logo {
-            color: #fff;
+            color: #e63946;
             font-size: 12px;
             font-weight: 600;
         }
 
         .navegacao-logo span {
-            color: #e63946;
+            color: #fff;
         }
 
         .navegacao-itens {
@@ -219,6 +219,7 @@
 
         .secao-legislacao .secao-titulo {
             font-size: 36px;
+            text-shadow: rgba(250,250,250,0.6) 0px 0px 16px;
         }
 
         .info-lei {
@@ -247,6 +248,7 @@
             font-weight: 800;
             color: #fff;
             font-family: 'Syne';
+            
         }
 
         .info-lei-item .pena {

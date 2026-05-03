@@ -25,9 +25,9 @@ constraint chkInvestigacao check (situacao in ('arquivado', 'em andamento', 'con
 create table caso_feminicidio (
 id_caso int primary key auto_increment,
 tipo_crime varchar(50),
-constraint chkTipo_crime check (tipo_crime in ('tentativa', 'homicídio')),
+constraint chkTipo_crime check (tipo_crime in ('tentativa', 'feminicidio')),
 categoria varchar(50),
-constraint chkCategoria check (categoria in ('intímo', 'nao-intimo', 'familiar', 'sexual', 'reprodutivo', 'conexão')),
+constraint chkCategoria check (categoria in ('intímo', 'nao-intimo', 'familiar')),
 dt_ocorrencia date,
 estado varchar(100),
 cidade varchar(100),
