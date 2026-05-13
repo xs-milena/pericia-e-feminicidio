@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Cadastro - Perícia & Feminicídio</title>
+
+    <script src="./js/sessao.js"></script>
+
+    <link rel="stylesheet" href="./css/cadastro.css" />
+  </head>
+
+  <body onload="listar()">
+    <div class="barra-superior">
+      <p>
+        Precisa de ajuda? <a href="">Ligue 180</a> - Central de Atendimento à
+        Mulher
+      </p>
+    </div>
+
+    <div id="nav-e-banner">
+      <div class="navegacao">
+        <div class="navegacao-logo">
+          <div class="navegacao-logo">PERÍCIA <span>&</span> FEMINICÍDIO</div>
+        </div>
+        <div class="navegacao-itens">
+          <a href="index.html">INÍCIO</a>
+          <a href="#legislacao">LEGISLAÇÃO</a>
+          <a href="#pericia">PERÍCIA</a>
+          <a href="#evidencias">EVIDÊNCIAS</a>
+          <a href="#laudo">LAUDO</a>
+          <a href="#dados">DADOS</a>
+          <a href="#sobre">SOBRE</a>
+          <a href="login.html" class="botao-login">LOGIN</a>
+        </div>
+      </div>
+
+      <div class="alerta_erro">
+        <div class="card_erro" id="cardErro">
+          <span id="mensagem_erro"></span>
+        </div>
+      </div>
+      <div class="hero-cadastro">
+        <div class="container-cadastro">
+          <div class="lado-esquerdo">
+            <h1 class="titulo-cadastro">
+              BEM-VINDO!<br />
+              <span class="cor-vermelha">CADASTRE-SE</span>
+            </h1>
+            <p class="descricao-cadastro">
+              Preencha o formulário para registrar seu acesso ao Sistema de
+              Registro Pericial.
+            </p>
+          </div>
+
+          <div class="lado-direito">
+            <div class="formulario-cadastro">
+              <div class="secao-formulario">
+                <h3 class="titulo-secao-form">// DADOS GERAIS</h3>
+                <div class="grupo-campos">
+                  <div class="campo">
+                    <label>CÓDIGO DE ATIVAÇÃO</label>
+                    <input
+                      type="text"
+                      id="codigo_input"
+                      placeholder="Insira aqui seu código"
+                    />
+                  </div>
+                  <div class="campo">
+                    <label>CARGO</label>
+                    <select id="cargo_input">
+                      <option value="" disabled selected hidden>
+                        Selecione o cargo
+                      </option>
+                      <option value="diretor">Diretor</option>
+                      <option value="coordenador">Coordenador</option>
+                      <option value="perito criminal">Períto Criminal</option>
+                      <option value="auxiliar tecnico">Auxíliar Técnico</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grupo-campos">
+                  <div class="campo">
+                    <label for="nome">NOME COMPLETO</label>
+                    <input
+                      type="text"
+                      id="nome_input"
+                      placeholder="Nome completo do titular"
+                    />
+                  </div>
+
+                  <div class="campo">
+                    <label for="cpf">CPF</label>
+                    <input
+                      type="text"
+                      id="cpf_input"
+                      placeholder="CPF do titular"
+                    />
+                  </div>
+                </div>
+
+                <div class="grupo-campos">
+                  <div class="campo">
+                    <label for="email">E-MAIL INSTITUCIONAL</label>
+                    <input
+                      type="email"
+                      id="email_input"
+                      placeholder="seu@email.com"
+                    />
+                  </div>
+
+                  <div class="campo">
+                    <label for="telefone">TELEFONE</label>
+                    <input
+                      type="tel"
+                      id="telefone_input"
+                      placeholder="(11) 99999-9999"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="secao-formulario">
+                <h3 class="titulo-secao-form">// CREDENCIAL DE ACESSO</h3>
+
+                <div class="grupo-campos">
+                  <div class="campo">
+                    <label for="senha">SENHA</label>
+                    <input
+                      type="password"
+                      id="senha_input"
+                      placeholder="Mínimo 6 caracteres"
+                    />
+                  </div>
+
+                  <div class="campo">
+                    <label for="confirmar-senha">CONFIRMAR SENHA</label>
+                    <input
+                      type="password"
+                      id="confirmacao_senha_input"
+                      placeholder="Digite a senha novamente"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="botoes-formulario">
+                <button
+                  type="submit"
+                  class="botao-cadastrar"
+                  onclick="cadastrar()"
+                >
+                  CADASTRAR
+                </button>
+                <p class="texto-login">
+                  Já possui cadastro? <a href="login.html">Faça o Login!</a>
+                </p>
+                <div id="div_aguardar"></div>
+              </div>
+              <div id="div_aguardar" class="loading-div">
+              <img src="./assets/circle-loading.gif" id="loading-gif" />
+                </div>
+              <div id="div_erros_login"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rodape">
+        <span
+          >Precisa de ajuda? <a href="#">Ligue 180</a> – Central de Atendimento
+          à Mulher</span
+        >
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  let listaInstitutosCriminaisCadastrados = [];
+
+  function cadastrar() {
+    // aguardar();
+
+    //Recupere o valor da nova input pelo nome do id
+    // Agora vá para o método fetch logo abaixo
+    var nomeVar = nome_input.value;
+    var emailVar = email_input.value;
+    var cpfVar = cpf_input.value;
+    var senhaVar = senha_input.value;
+    var confirmacaoSenhaVar = confirmacao_senha_input.value;
+    var codigoVar = codigo_input.value;
+    var telefoneVar = telefone_input.value;
+    var cargoVar = cargo_input.value;
+    var idInstitutoCriminalVincular;
+
+    // Verificando se há algum campo em branco
+    if (
+      nomeVar == "" ||
+      emailVar == "" ||
+      cpfVar == "" ||
+      senhaVar == "" ||
+      confirmacaoSenhaVar == "" ||
+      codigoVar == "" ||
+      telefoneVar == "" ||
+      cargoVar == ""
+    ) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "(Não pode haver campos em branco)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    if (nomeVar.length <= 1) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "(Nome inválido)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    if (!emailVar.includes("@") || !emailVar.includes(".com")) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "(Email inválido)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    if (senhaVar.length < 6) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "(Senha deve conter +6 caracteres)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    if (confirmacaoSenhaVar != senhaVar) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "(Confirmação de senha incorreta)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    if (cpfVar.length < 11) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "(CPF inválido)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    if (telefoneVar.length < 11) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "(Telefone inválido)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    for (let i = 0; i < listaInstitutosCriminaisCadastrados.length; i++) {
+      if (listaInstitutosCriminaisCadastrados[i].codigo_ativacao == codigoVar) {
+        idInstitutoCriminalVincular =
+          listaInstitutosCriminaisCadastrados[i].id_instituto;
+        console.log("Código de ativação válido.");
+        break;
+      } else {
+        cardErro.style.display = "block";
+        mensagem_erro.innerHTML = "(Mensagem de erro para código inválido)";
+        finalizarAguardar();
+      }
+    }
+
+    // Enviando o valor da nova input
+    fetch("/usuarios/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // crie um atributo que recebe o valor recuperado aqui
+        // Agora vá para o arquivo routes/usuario.js
+        nomeServer: nomeVar,
+        emailServer: emailVar,
+        cpfServer: cpfVar,
+        telefoneServer: telefoneVar,
+        senhaServer: senhaVar,
+        cargoServer: cargoVar,
+        idInstitutoCriminalVincularServer: idInstitutoCriminalVincular,
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+          cardErro.style.display = "block";
+
+          mensagem_erro.innerHTML =
+            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+          setTimeout(() => {
+            window.location = "login.html";
+          }, "2000");
+
+          limparFormulario();
+          finalizarAguardar();
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+        finalizarAguardar();
+      });
+
+    return false;
+  }
+
+  function listar() {
+    fetch("/institutoCriminal/listar", {
+      method: "GET",
+    })
+      .then(function (resposta) {
+        resposta.json().then((instituto_criminal) => {
+          instituto_criminal.forEach((instituto_criminal) => {
+            listaInstitutosCriminaisCadastrados.push(instituto_criminal);
+
+            console.log("listaInstitutosCriminaisCadastrados");
+            console.log(listaInstitutosCriminaisCadastrados[0].codigo_ativacao);
+          });
+        });
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });
+  }
+
+  function sumirMensagem() {
+    cardErro.style.display = "none";
+  }
+</script>
