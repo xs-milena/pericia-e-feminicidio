@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Reflexão</title>
+
+    <link rel="stylesheet" href="./css/quiz-reflexao-e-pericia.css">
+
+</head>
+
+<body onload="iniciarQuiz()">
+
+ <div class="barra-superior">
+              <span>Se você está em situação de risco <a href="">ligue 180</a> (Central de Atendimento à Mulher) ou <a href="">190</a> (Policía Militar)</span>
+
+    </div>
+
+    <div id="nav-e-banner">
+      <div class="navegacao">
+        <div class="navegacao-logo">
+          <div class="navegacao-logo">PERÍCIA <span>&</span> FEMINICÍDIO</div>
+        </div>
+        <div class="navegacao-itens">
+                <a href="index.html">INICIO</a>
+                <a href="index.html">LEGISLAÇÃO</a>
+                <a href="index.html">PERICÍA</a>
+                <a href="index.html">VESTÍGIOS</a>
+                <a href="index.html">EVIDÊNCIAS</a>
+                <a href="index.html">LAUDO</a>
+                <a href="index.html">DADOS</a>
+                <a href="index.html">SOBRE</a>
+                <a href="login.html" class="botao-login">LOGIN</a>
+        </div>
+      </div>
+        <main class="conteudo_principal">
+
+            <div id="pontuacaoEJogo">
+
+                <div id="pontuacao" class="card_quiz">
+
+                    <div id="pontuacaoFinalJogo" style="display:none;">
+                        <span id="pontuacaoFinal">
+                            Pontuação Final:
+                            <strong id="spanPontuacaoFinal">***</strong>
+                        </span>
+                        <br><br>
+                        <span id="msgFinal">***</span>
+                    </div>
+                </div>
+
+                <div id="jogo" class="card_quiz" style="width: 800px; height: auto; padding: 30px; margin-top: 30px;">
+
+                    <div id="infoQuestao">
+                        <span>
+                            Questão atual:
+                            <strong id="spanNumeroDaQuestaoAtual">1</strong> de
+                            <strong id="qtdQuestoes">8</strong> questões.
+                        </span>
+                    </div>
+
+                    <br>
+
+                    <div id="perguntaDaQuestaoAtual">
+                        <span id="spanQuestaoExibida" class="titulo_card"></span>
+                    </div>
+
+                    <br>
+
+                    <div id="opcoes">
+                        <p><input type="radio" id="primeiraOpcao" name="option" value="alternativaA"> <label for="primeiraOpcao" id="labelOpcaoUm"></label></p>
+                        <p><input type="radio" id="segundaOpcao" name="option" value="alternativaB"> <label for="segundaOpcao" id="labelOpcaoDois"></label></p>
+                        <p><input type="radio" id="terceiraOpcao" name="option" value="alternativaC"> <label for="terceiraOpcao" id="labelOpcaoTres"></label></p>
+                        <p><input type="radio" id="quartaOpcao" name="option" value="alternativaD"> <label for="quartaOpcao" id="labelOpcaoQuatro"></label></p>
+                    </div>
+
+                    <br>
+
+                    <div id="reflexaoContainer" style="display:none;">
+                        <h3 style="color:#e63946;">Reflexão:</h3>
+                        <p id="textoReflexao"></p>
+                    </div>
+
+                    <br>
+
+                    <div id="botoes">
+                        <button onclick="submeter()" id="btnSubmeter" class="botao_iniciar">SUBMETER</button>
+                        <button onclick="avancar()" id="btnProx" class="botao_iniciar" disabled>PRÓXIMA</button>
+                        <button onclick="tentarNovamente()" id="btnTentarNovamente" class="botao_iniciar" disabled>TENTAR NOVAMENTE</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>
+    <script>
+        
+        if (!sessionStorage.ID_USUARIO) {
+            window.location = "login.html";
+        }
+        const listaDeQuestoes = [
+            {
+                pergunta: "Você já presenciou ou soube de algum caso em que uma mulher foi controlada pelo parceiro (celular, roupas, amizades ou rotina)?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "Controle excessivo, ciúmes possessivos e isolamento social são formas de violência psicológica e podem anteceder agressões físicas."
+            },
+            {
+                pergunta: "Você acredita que brigas entre casais devem ser resolvidas apenas entre o casal, sem interferência externa?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "A violência doméstica não é um problema privado. Denunciar e oferecer apoio pode salvar vidas."
+            },
+            {
+                pergunta: "Você acha que frases como 'em briga de marido e mulher não se mete a colher' podem impedir pedidos de ajuda?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "O silêncio social pode contribuir para que vítimas permaneçam em situações de risco sem apoio."
+            },
+            {
+                pergunta: "Você considera que frases como 'ela provocou' podem minimizar ou justificar a violência?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "Nenhuma atitude da vítima justifica violência. Esse tipo de discurso fortalece a cultura da culpabilização da mulher."
+            },
+            {
+                pergunta: "Você conhece alguém que já quis sair de um relacionamento abusivo, mas permaneceu por medo?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "O momento de rompimento é um dos períodos de maior risco para vítimas de violência doméstica."
+            },
+            {
+                pergunta: "Você acredita que a ausência de agressões físicas significa ausência de violência?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "Violências psicológica, moral, sexual e patrimonial também causam danos profundos e são reconhecidas pela Lei Maria da Penha."
+            },
+            {
+                pergunta: "Você acredita que a violência psicológica pode evoluir para violência física?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "Muitos casos de feminicídio foram precedidos por ameaças, humilhações, controle emocional e violência psicológica."
+            },
+            {
+                pergunta: "Se uma amiga dissesse que sente medo do próprio parceiro, você identificaria isso como um sinal de perigo?",
+                alternativaA: "Sim",
+                alternativaB: "Não",
+                alternativaC: "Talvez",
+                alternativaD: "Não sei responder",
+                reflexao: "O medo constante dentro de um relacionamento é um importante sinal de alerta para situações de violência."
+            }
+        ];
+
+        // VARIÁVEIS GLOBAIS
+        let respostas = [];
+        let numeroDaQuestaoAtual = 0;
+        let pontuacaoFinal = 0;
+        let quantidadeDeQuestoes = listaDeQuestoes.length;
+        
+        // Contadores para distribuição de respostas
+        let totalSim = 0;
+        let totalNao = 0;
+        let totalTalvez = 0;
+        let totalNaoSei = 0;
+
+        // Elementos DOM
+        const btnSubmeter = document.getElementById('btnSubmeter');
+        const btnProx = document.getElementById('btnProx');
+        const btnTentarNovamente = document.getElementById('btnTentarNovamente');
+        const jogo = document.getElementById('jogo');
+        const pontuacao = document.getElementById('pontuacao');
+        const reflexaoContainer = document.getElementById('reflexaoContainer');
+        const textoReflexao = document.getElementById('textoReflexao');
+
+
+        function iniciarQuiz() {
+
+            document.getElementById('pontuacao').style.display = "block";
+            document.getElementById('jogo').style.display = "block";
+
+            document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes;
+
+            preencherHTMLcomQuestaoAtual(0);
+
+            btnSubmeter.disabled = false;
+            btnProx.disabled = true;
+            btnTentarNovamente.disabled = true;
+            
+            // Resetar contadores de distribuição
+            totalSim = 0;
+            totalNao = 0;
+            totalTalvez = 0;
+            totalNaoSei = 0;
+        }
+
+        function preencherHTMLcomQuestaoAtual(index) {
+            habilitarAlternativas(true);
+            const questaoAtual = listaDeQuestoes[index];
+            numeroDaQuestaoAtual = index;
+            
+            document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = Number(index) + 1;
+            document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
+            document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
+            document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alternativaB;
+            document.getElementById("labelOpcaoTres").innerHTML = questaoAtual.alternativaC;
+            document.getElementById("labelOpcaoQuatro").innerHTML = questaoAtual.alternativaD;
+            
+            // Esconder reflexão ao carregar nova questão
+            reflexaoContainer.style.display = "none";
+        }
+
+        function submeter() {
+            const options = document.getElementsByName("option");
+
+            let hasChecked = false;
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].checked) {
+                    hasChecked = true;
+                    break;
+                }
+            }
+
+            if (!hasChecked) {
+                alert("Não há alternativas escolhidas. Escolha uma opção.");
+            } else {
+                btnSubmeter.disabled = true;
+                btnProx.disabled = false;
+                habilitarAlternativas(false);
+                checarResposta();
+            }
+        }
+
+        function habilitarAlternativas(trueOrFalse) {
+            let opcaoEscolhida = trueOrFalse ? false : true;
+            document.getElementById('primeiraOpcao').disabled = opcaoEscolhida;
+            document.getElementById('segundaOpcao').disabled = opcaoEscolhida;
+            document.getElementById('terceiraOpcao').disabled = opcaoEscolhida;
+            document.getElementById('quartaOpcao').disabled = opcaoEscolhida;
+        }
+
+        function avancar() {
+            btnProx.disabled = true;
+            btnSubmeter.disabled = false;
+            desmarcarRadioButtons();
+            limparCoresBackgroundOpcoes();
+
+            if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+                preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual + 1);
+            } else {
+                finalizarJogo();
+                return;
+            }
+        }
+
+        let tentativa = sessionStorage.ID_TENTATIVA ? Number(sessionStorage.ID_TENTATIVA) : 1;
+
+        function tentarNovamente() {
+            sessionStorage.ID_TENTATIVA = tentativa + 1;
+            window.location.reload();
+        }
+
+        function checarResposta() {
+            const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual];
+            const options = document.getElementsByName("option");
+            
+            // Contar a resposta escolhida para distribuição
+            options.forEach((option) => {
+                if (option.checked) {
+                    if (option.value === "alternativaA") 
+                    totalSim++;
+                    else if (option.value === "alternativaB") 
+                    totalNao++;
+                    else if (option.value === "alternativaC") 
+                    totalTalvez++;
+                    else if (option.value === "alternativaD") 
+                    totalNaoSei++;
+
+                respostas.push({
+                    pergunta: numeroDaQuestaoAtual + 1,
+                    alternativa: option.value
+                });
+                }
+            });
+
+            // Mostrar reflexão
+            textoReflexao.textContent = questaoAtual.reflexao;
+            reflexaoContainer.style.display = "block";
+
+            // Verificar se está na última questão para mudar texto do botão
+            if (numeroDaQuestaoAtual === quantidadeDeQuestoes - 1) {
+                btnProx.innerHTML = "PRÓXIMA";
+            } else {
+                btnProx.innerHTML = "PRÓXIMA";
+            }
+        }
+
+        function limparCoresBackgroundOpcoes() {
+            const options = document.getElementsByName("option");
+            options.forEach((option) => {
+                const labelId = option.labels[0].id;
+                document.getElementById(labelId).classList.remove("text-danger-with-bg", "text-success-with-bg");
+            });
+        }
+
+        function desmarcarRadioButtons() {
+            const options = document.getElementsByName("option");
+            for (let i = 0; i < options.length; i++) {
+                options[i].checked = false;
+            }
+        }
+
+        var id_usuario = sessionStorage.ID_USUARIO;
+
+        function finalizarJogo() {
+
+        respostas.forEach(function(resposta) {
+            fetch("/quiz/quiz_reflexao", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                id_tentativa: tentativa,
+                fk_usuario: id_usuario,
+                pergunta: resposta.pergunta,
+                alternativa: resposta.alternativa.replace("alternativa", "")
+            })
+    });
+});
+
+
+    jogo.innerHTML = `
+    <div class="resultado-final">
+        <h2>RESULTADO FINAL</h2>
+        <p>Obrigado por participar deste momento de reflexão.</p>
+
+        <div class="resultado-contadores">
+            <div class="card-resultado">
+                <span>Sim</span>
+                <strong>${totalSim}</strong>
+            </div>
+            <div class="card-resultado">
+                <span>Não</span>
+                <strong>${totalNao}</strong>
+            </div>
+            <div class="card-resultado">
+                <span>Talvez</span>
+                <strong>${totalTalvez}</strong>
+            </div>
+            <div class="card-resultado">
+                <span>Não sei</span>
+                <strong>${totalNaoSei}</strong>
+            </div>
+        </div>
+
+        <div class="mensagem-final">
+            <p>   <b>Refletir sobre violência de gênero é importante para reconhecer sinais de perigo, combater o silêncio e incentivar apoio às vítimas.</b></p>
+            <p>   <b>Muitas situações abusivas começam de forma silenciosa: controle excessivo, manipulação emocional, isolamento social e ameaças.</b></p>
+            <p>   <b>Informação, empatia e denúncia podem salvar vidas.</b></p>
+        </div>
+
+        <button onclick="tentarNovamente()" id="btnTentarNovamenteFinal">
+            FAZER NOVAMENTE
+        </button>
+    </div>
+    `;
+
+    
+}
+    </script>
+</body>
+</html>

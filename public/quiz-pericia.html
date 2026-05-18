@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Perícia Criminal</title>
+    <link rel="stylesheet" href="./css/quiz-reflexao-e-pericia.css">
+</head>
+
+<body onload="iniciarQuiz()">
+
+    <div class="barra-superior">
+        <span>Se você está em situação de risco <a href="">ligue 180</a> (Central de Atendimento à Mulher) ou <a href="">190</a> (Polícia Militar)</span>
+    </div>
+
+    <div id="nav-e-banner">
+        <div class="navegacao">
+            <div class="navegacao-logo">
+                <div class="navegacao-logo">PERÍCIA <span>&</span> FEMINICÍDIO</div>
+            </div>
+
+            <div class="navegacao-itens">
+                <a href="index.html">INICIO</a>
+                <a href="index.html">LEGISLAÇÃO</a>
+                <a href="index.html">PERÍCIA</a>
+                <a href="index.html">VESTÍGIOS</a>
+                <a href="index.html">EVIDÊNCIAS</a>
+                <a href="index.html">LAUDO</a>
+                <a href="index.html">DADOS</a>
+                <a href="index.html">SOBRE</a>
+                <a href="login.html" class="botao-login">LOGIN</a>
+            </div>
+        </div>
+
+        <main class="conteudo_principal">
+
+            <div id="pontuacaoEJogo">
+
+                <div id="pontuacao" class="card_quiz">
+                    <div id="pontuacaoDuranteJogo">
+                        <p>Acertos: <span id="spanCertas">0</span></p>
+                        <p>Erros: <span id="spanErradas">0</span></p>
+                    </div>
+
+                    <div id="pontuacaoFinalJogo" style="display:none;">
+                        <span id="pontuacaoFinal">
+                            Pontuação Final:
+                            <strong id="spanPontuacaoFinal">***</strong>
+                        </span>
+                        <br><br>
+                        <span id="msgFinal">***</span>
+                    </div>
+                </div>
+
+                <div id="jogo" class="card_quiz" style="width: 800px; height: auto; padding: 30px; margin-top: 30px;">
+
+                    <div id="infoQuestao">
+                        <span>
+                            Questão atual:
+                            <strong id="spanNumeroDaQuestaoAtual">1</strong> de
+                            <strong id="qtdQuestoes">5</strong> questões.
+                        </span>
+                    </div>
+
+                    <br>
+
+                    <div id="perguntaDaQuestaoAtual">
+                        <span id="spanQuestaoExibida" class="titulo_card"></span>
+                    </div>
+
+                    <br>
+
+                    <div id="opcoes">
+                        <p><input type="radio" id="primeiraOpcao" name="option" value="alternativaA"> <label for="primeiraOpcao" id="labelOpcaoUm"></label></p>
+                        <p><input type="radio" id="segundaOpcao" name="option" value="alternativaB"> <label for="segundaOpcao" id="labelOpcaoDois"></label></p>
+                        <p><input type="radio" id="terceiraOpcao" name="option" value="alternativaC"> <label for="terceiraOpcao" id="labelOpcaoTres"></label></p>
+                        <p><input type="radio" id="quartaOpcao" name="option" value="alternativaD"> <label for="quartaOpcao" id="labelOpcaoQuatro"></label></p>
+                    </div>
+
+                    <br>
+
+                    <div id="botoes">
+                        <button onclick="submeter()" id="btnSubmeter" class="botao_iniciar">SUBMETER</button>
+                        <button onclick="avancar()" id="btnProx" class="botao_iniciar" disabled>PRÓXIMA</button>
+                        <button onclick="tentarNovamente()" id="btnTentarNovamente" class="botao_iniciar" disabled>TENTAR NOVAMENTE</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+<script>
+    
+    if (!sessionStorage.ID_USUARIO) {
+    window.location = "login.html";
+}
+
+const listaDeQuestoes = [
+    {
+        pergunta: "Qual é a principal função do isolamento da cena do crime em uma perícia de feminicídio?",
+        alternativaA: "Impedir a imprensa",
+        alternativaB: "Preservar vestígios para análise",
+        alternativaC: "Acelerar o sepultamento",
+        alternativaD: "Retirar familiares",
+        alternativaCorreta: "alternativaB"
+    },
+    {
+        pergunta: "Em um local de crime, manchas de sangue podem auxiliar na:",
+        alternativaA: "Reconstrução da dinâmica da agressão",
+        alternativaB: "Definição da sentença",
+        alternativaC: "Escolha do delegado",
+        alternativaD: "Liberação do imóvel",
+        alternativaCorreta: "alternativaA"
+    },
+    {
+        pergunta: "O laudo pericial em casos de feminicídio é importante porque:",
+        alternativaA: "Substitui o julgamento",
+        alternativaB: "Serve apenas para fotos",
+        alternativaC: "Apresenta conclusões técnicas da perícia",
+        alternativaD: "É opcional",
+        alternativaCorreta: "alternativaC"
+    },
+    {
+        pergunta: "A ausência de sinais de arrombamento em um feminicídio pode indicar:",
+        alternativaA: "Crime sem violência",
+        alternativaB: "Agressor conhecido da vítima",
+        alternativaC: "Erro pericial",
+        alternativaD: "Falsa denúncia",
+        alternativaCorreta: "alternativaB"
+    },
+    {
+        pergunta: "A cadeia de custódia serve para:",
+        alternativaA: "Guardar depoimentos",
+        alternativaB: "Registrar testemunhas",
+        alternativaC: "Garantir integridade das provas",
+        alternativaD: "Encerrar o inquérito",
+        alternativaCorreta: "alternativaC"
+    }
+];
+
+let numeroDaQuestaoAtual = 0;
+let pontuacaoFinal = 0;
+let certas = 0;
+let erradas = 0;
+let quantidadeDeQuestoes = listaDeQuestoes.length;
+
+const btnSubmeter = document.getElementById('btnSubmeter');
+const btnProx = document.getElementById('btnProx');
+const btnTentarNovamente = document.getElementById('btnTentarNovamente');
+
+function iniciarQuiz() {
+    document.getElementById('qtdQuestoes').innerHTML = quantidadeDeQuestoes;
+    preencherHTMLcomQuestaoAtual(0);
+}
+
+function preencherHTMLcomQuestaoAtual(index) {
+    habilitarAlternativas(true);
+    const questaoAtual = listaDeQuestoes[index];
+    numeroDaQuestaoAtual = index;
+
+    document.getElementById("spanNumeroDaQuestaoAtual").innerHTML = index + 1;
+    document.getElementById("spanQuestaoExibida").innerHTML = questaoAtual.pergunta;
+    document.getElementById("labelOpcaoUm").innerHTML = questaoAtual.alternativaA;
+    document.getElementById("labelOpcaoDois").innerHTML = questaoAtual.alternativaB;
+    document.getElementById("labelOpcaoTres").innerHTML = questaoAtual.alternativaC;
+    document.getElementById("labelOpcaoQuatro").innerHTML = questaoAtual.alternativaD;
+}
+
+function submeter() {
+    const options = document.getElementsByName("option");
+    let marcada = false;
+
+    for (let i = 0; i < options.length; i++) {
+        if (options[i].checked) {
+            marcada = true;
+            break;
+        }
+    }
+
+    if (!marcada) {
+        alert("Escolha uma alternativa.");
+        return;
+    }
+
+    btnSubmeter.disabled = true;
+    btnProx.disabled = false;
+    habilitarAlternativas(false);
+    checarResposta();
+}
+
+function habilitarAlternativas(valor) {
+    primeiraOpcao.disabled = !valor;
+    segundaOpcao.disabled = !valor;
+    terceiraOpcao.disabled = !valor;
+    quartaOpcao.disabled = !valor;
+}
+
+function checarResposta() {
+    const questaoAtual = listaDeQuestoes[numeroDaQuestaoAtual];
+    const correta = questaoAtual.alternativaCorreta;
+    const options = document.getElementsByName("option");
+
+    let labelCorreta = null;
+
+    options.forEach((option) => {
+        if (option.value == correta) {
+            labelCorreta = option.labels[0].id;
+        }
+    });
+
+    options.forEach((option) => {
+        if (option.checked && option.value == correta) {
+            document.getElementById(labelCorreta).style.color = "green";
+            pontuacaoFinal++;
+            certas++;
+            document.getElementById("spanCertas").innerHTML = certas;
+        } else if (option.checked && option.value != correta) {
+            document.getElementById(option.labels[0].id).style.color = "red";
+            document.getElementById(labelCorreta).style.color = "green";
+            erradas++;
+            document.getElementById("spanErradas").innerHTML = erradas;
+        }
+    });
+}
+
+function avancar() {
+    btnSubmeter.disabled = false;
+    btnProx.disabled = true;
+    desmarcarRadioButtons();
+    limparCores();
+
+    if (numeroDaQuestaoAtual < quantidadeDeQuestoes - 1) {
+        preencherHTMLcomQuestaoAtual(numeroDaQuestaoAtual + 1);
+    } else {
+        finalizarJogo();
+    }
+}
+
+function limparCores() {
+    document.getElementById("labelOpcaoUm").style.color = "";
+    document.getElementById("labelOpcaoDois").style.color = "";
+    document.getElementById("labelOpcaoTres").style.color = "";
+    document.getElementById("labelOpcaoQuatro").style.color = "";
+}
+
+function desmarcarRadioButtons() {
+    const options = document.getElementsByName("option");
+    for (let i = 0; i < options.length; i++) {
+        options[i].checked = false;
+    }
+}
+
+var id_usuario = sessionStorage.ID_USUARIO;
+
+function finalizarJogo() {
+    let respondidas = certas + erradas;
+
+            fetch("/quiz/quiz_pericia", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                fk_usuario: id_usuario,
+                acertos: certas,
+                erros: erradas,
+                total_questoes: quantidadeDeQuestoes,
+            })
+    });
+
+    jogo.innerHTML = `
+    <div class="resultado-final">
+        <h2>RESULTADO FINAL</h2>
+        <p>Obrigado por participar do quiz sobre perícia criminal.</p>
+
+        <div class="resultado-contadores">
+            <div class="card-resultado">
+                <span>Acertos</span>
+                <strong>${certas}</strong>
+            </div>
+
+            <div class="card-resultado">
+                <span>Erros</span>
+                <strong>${erradas}</strong>
+            </div>
+
+            <div class="card-resultado">
+                <span>Respondidas</span>
+                <strong>${respondidas}</strong>
+            </div>
+
+            <div class="card-resultado">
+                <span>Pontuação Final</span>
+                <strong>${pontuacaoFinal}/${quantidadeDeQuestoes}</strong>
+            </div>
+        </div>
+
+        <div class="mensagem-final">
+            <p><b>${gerarMensagemFinal()}</b></p>
+        </div>
+
+        <button onclick="tentarNovamente()" id="btnTentarNovamenteFinal">
+            FAZER NOVAMENTE
+        </button>
+    </div>
+    `;
+
+    
+}
+
+function gerarMensagemFinal() {
+    if (pontuacaoFinal <= 2) {
+        return "A perícia criminal é fundamental para esclarecer casos de feminicídio. Vale revisar como vestígios, laudos e evidências ajudam a reconstruir o crime.";
+    } 
+    
+    else if (pontuacaoFinal <= 4) {
+        return "Você demonstrou bom conhecimento sobre procedimentos periciais. Entender a análise da cena do crime é essencial para compreender investigações de feminicídio.";
+    } 
+    
+    else {
+        return "Excelente desempenho! Você compreende muito bem a importância da perícia criminal, dos vestígios e do laudo técnico na investigação de feminicídios.";
+    }
+}
+
+function tentarNovamente() {
+    window.location.reload();
+}
+</script>
+
+</body>
+</html>
